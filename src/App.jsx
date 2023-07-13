@@ -28,6 +28,7 @@ import {
   BellOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
+import { BASE_URL } from "./config";
 import enUS from "antd/locale/en_US";
 import vi_VN from "antd/locale/vi_VN";
 import ko_KR from "antd/locale/ko_KR";
@@ -39,33 +40,33 @@ const { Text, Title } = Typography;
 
 const menu = [
   {
-    key: "/home",
-    label: <Link to="/home">Home</Link>,
+    key: `${BASE_URL}/home`,
+    label: <Link to={`${BASE_URL}/home`}>Home</Link>,
     icon: <HomeOutlined />,
   },
   {
-    key: "/quotes",
-    label: <Link to="/quotes">Quotes</Link>,
+    key: `${BASE_URL}/quotes`,
+    label: <Link to={`${BASE_URL}/quotes`}>Quotes</Link>,
     icon: <HighlightOutlined />,
   },
   {
-    key: "/unitConverter",
-    label: <Link to="/unitConverter">Unit Converter</Link>,
+    key: `${BASE_URL}/unitConverter`,
+    label: <Link to={`${BASE_URL}/unitConverter`}>Unit Converter</Link>,
     icon: <TransactionOutlined />,
   },
   {
-    key: "/chessboard",
-    label: <Link to="/chessboard">Chess Board</Link>,
+    key: `${BASE_URL}/chessboard`,
+    label: <Link to={`${BASE_URL}/chessboard`}>Chess Board</Link>,
     icon: <AppstoreOutlined />,
   },
   {
-    key: "/calculator",
-    label: <Link to="/calculator">Calculator</Link>,
+    key: `${BASE_URL}/calculator`,
+    label: <Link to={`${BASE_URL}/calculator`}>Calculator</Link>,
     icon: <CalculatorOutlined />,
   },
   {
-    key: "/pomodoro",
-    label: <Link to="/pomodoro">Pomodoro</Link>,
+    key: `${BASE_URL}/pomodoro`,
+    label: <Link to={`${BASE_URL}/pomodoro`}>Pomodoro</Link>,
     icon: <ClockCircleOutlined />,
   },
 ];
@@ -200,17 +201,17 @@ function App() {
 
   useEffect(() => {
     let pathName = location.pathname;
-    if (pathName === "/home") {
+    if (pathName === `${BASE_URL}/home`) {
       setTitleComponent("Calendar");
-    } else if (pathName === "/quotes") {
+    } else if (pathName === `${BASE_URL}/quotes`) {
       setTitleComponent("Quotes");
-    } else if (pathName === "/unitConverter") {
+    } else if (pathName === `${BASE_URL}/unitConverter`) {
       setTitleComponent("Unit Converter");
-    } else if (pathName === "/chessboard") {
+    } else if (pathName === `${BASE_URL}/chessboard`) {
       setTitleComponent("Chessboard");
-    } else if (pathName === "/calculator") {
+    } else if (pathName === `${BASE_URL}/calculator`) {
       setTitleComponent("Calculator");
-    } else if (pathName === "/pomodoro") {
+    } else if (pathName === `${BASE_URL}/pomodoro`) {
       setTitleComponent("Pomodoro");
     }
   }, [location]);
@@ -225,7 +226,7 @@ function App() {
             collapsed={collapsed}
             style={styles.boxShadow}
           >
-            <Link to="/home" style={styles.logo}>
+            <Link to={`${BASE_URL}/home`} style={styles.logo}>
               <Image
                 width={collapsed ? 50 : 100}
                 style={{ transition: "width 3s" }}
@@ -365,7 +366,7 @@ const styles = {
   },
   selectLanguages: {
     width: 90,
-    marginRight: 10
+    marginRight: 10,
   },
   avatar: {
     margin: "-5px 10px 0 10px",
@@ -384,7 +385,7 @@ const styles = {
   logo: {
     display: "flex",
     justifyContent: "center",
-    marginTop: 10
+    marginTop: 10,
   },
   drawer: {
     position: "fixed",
