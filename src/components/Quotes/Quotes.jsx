@@ -21,9 +21,9 @@ const Quotes = () => {
   useEffect(() => {
     const getQuotes = async (page) => {
       try {
-        const response = await axios.post("http://localhost:3000/quotes", {
-          numQuotes: numQuotes,
-        });
+        const response = await axios.get(
+          `https://api.quotable.io/quotes/random?limit=${numQuotes}`
+        );
         const startIdx = (page - 1) * 6;
         const endIdx = startIdx + 6;
         const quotesForPage = response.data.slice(startIdx, endIdx);
@@ -63,7 +63,7 @@ const Quotes = () => {
           {quotes.map((item, idx) => (
             <Col key={idx} span={11} style={styles.colCard}>
               <Card bordered title={item.author}>
-                <Text> {item.quote} </Text>
+                <Text> {item.content} </Text>
               </Card>
             </Col>
           ))}
@@ -90,7 +90,7 @@ const styles = {
   },
   inputQuoteChange: {
     float: "left",
-    marginBottom: 20
+    marginBottom: 20,
   },
   colCard: {
     margin: 15,

@@ -10,6 +10,7 @@ import Calculator from "./components/Calculator/Calculator.jsx";
 import Chessboard from "./components/Chessboard/Chessboard.jsx";
 import Pomodoro from "./components/Pomodoro/Pomodoro";
 import ErrorPage from "./error-page";
+import LoginForm from "./login";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
         element: <Pomodoro />,
       },
     ],
+  },
+  {
+    path: `${BASE_URL}/login`,
+    element: <LoginForm />,
   },
 ]);
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, redirect } from "react-router-dom";
 import {
   Layout,
   Typography,
@@ -33,6 +33,7 @@ import enUS from "antd/locale/en_US";
 import vi_VN from "antd/locale/vi_VN";
 import ko_KR from "antd/locale/ko_KR";
 import { KR, VN, GB } from "country-flag-icons/react/3x2";
+import LoginForm from "./login";
 import Config, { typeToken } from "./config";
 
 const { Header, Content, Sider, Footer } = Layout;
@@ -131,6 +132,7 @@ const loading = (
 const alertNotification = <Spin indicator={loading} size="large" />;
 
 function App() {
+  const [token, setToken] = useState(null);
   const [titleComponent, setTitleComponent] = useState("Home");
   const [collapsed, setCollapsed] = useState(true);
   const [locale, setLocale] = useState(vi_VN);
@@ -215,130 +217,143 @@ function App() {
       setTitleComponent("Pomodoro");
     }
   }, [location]);
+
+  const onLogin = (tk) => {
+    if (!tk || !tk.length) {
+      return redirect(`${BASE_URL}/login`);
+    }
+    setToken(tk);
+  };
+
+  console.log("onLogin", token);
   return (
     <>
       <Config locale={locale} theme={themeObj}>
-        <Layout>
-          <Sider
-            theme="light"
-            trigger={null}
-            collapsible
-            collapsed={collapsed}
-            style={styles.boxShadow}
-          >
-            <Link to={`${BASE_URL}/home`} style={styles.logo}>
-              <Image
-                width={collapsed ? 50 : 100}
-                style={{ transition: "width 3s" }}
-                src="./assets/images/kits.png"
-                preview={false}
-              />
-            </Link>
-            <Menu
-              style={styles.menu}
-              mode="inline"
-              defaultSelectedKeys={location.pathname}
-              items={menu}
-            />
-          </Sider>
+        {token ? (
           <Layout>
-            <Header
-              style={{
-                ...styles.header,
-                ...styles.boxShadow,
-                backgroundColor: colorBgContainer,
-              }}
+            <Sider
+              theme="light"
+              trigger={null}
+              collapsible
+              collapsed={collapsed}
+              style={styles.boxShadow}
             >
-              <Space style={styles.collapse}>
-                <Button
-                  type="text"
-                  icon={
-                    collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-                  }
-                  onClick={() => setCollapsed(!collapsed)}
+              <Link to={`${BASE_URL}/home`} style={styles.logo}>
+                <Image
+                  width={collapsed ? 50 : 100}
+                  style={{ transition: "width 3s" }}
+                  src={`${BASE_URL}/assets/images/kits.png`}
+                  preview={false}
                 />
-                <Title level={4} style={styles.titleComponent}>
-                  {titleComponent}
-                </Title>
-              </Space>
-              <Space style={styles.rightHeader}>
-                <Select
-                  defaultValue={"vi_VN"}
-                  style={styles.selectLanguages}
-                  onChange={handleChangeLang}
-                  options={selectLanguages}
-                />
-                <Popover content={alertNotification}>
-                  <Badge count={5}>
-                    <BellOutlined style={styles.badge} />
-                  </Badge>
-                </Popover>
-
-                <Popover content={inforUser} title="User Information">
-                  <Avatar
-                    style={styles.avatar}
-                    size={31}
-                    src="./assets/images/longUser.jpg"
+              </Link>
+              <Menu
+                style={styles.menu}
+                mode="inline"
+                defaultSelectedKeys={location.pathname}
+                items={menu}
+              />
+            </Sider>
+            <Layout>
+              <Header
+                style={{
+                  ...styles.header,
+                  ...styles.boxShadow,
+                  backgroundColor: colorBgContainer,
+                }}
+              >
+                <Space style={styles.collapse}>
+                  <Button
+                    type="text"
+                    icon={
+                      collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                    }
+                    onClick={() => setCollapsed(!collapsed)}
                   />
-                </Popover>
-              </Space>
-            </Header>
-            <Content style={styles.content}>
-              <Outlet />
-            </Content>
-            <Footer style={styles.footer}>
-              Mini App &#169; 2023 Created by Trần Việt Long
-            </Footer>
-          </Layout>
-          <Space style={styles.drawer}>
-            <Button
-              type="primary"
-              onClick={showDrawer}
-              style={styles.btnDrawer}
-            >
-              <SettingOutlined spin={true} />
-              <Text strong={true} style={styles.textDrawer}>
-                Setting
-              </Text>
-            </Button>
-            <Drawer
-              title="Theme Customize"
-              placement="right"
-              onClose={onCloseDrawer}
-              open={openDrawer}
-            >
-              <Space direction="vertical">
-                <Space direction="vertical">
-                  <Title level={5}>Background</Title>
-                  <Space>
-                    <ColorPicker
-                      value={themeObj.token.colorBgContainer}
-                      onChange={(value) =>
-                        handleColorChange(value, typeToken.COLORBGCONTAINER)
-                      }
-                    />
-                    <Text>{themeObj.token.colorBgContainer}</Text>
-                  </Space>
+                  <Title level={4} style={styles.titleComponent}>
+                    {titleComponent}
+                  </Title>
                 </Space>
-                <Space direction="vertical">
-                  <Title level={5}>Color Primary</Title>
-                  <Space>
-                    <ColorPicker
-                      value={themeObj.token.colorPrimary}
-                      onChange={(value) =>
-                        handleColorChange(value, typeToken.COLORPRIMARY)
-                      }
+                <Space style={styles.rightHeader}>
+                  <Select
+                    defaultValue={"vi_VN"}
+                    style={styles.selectLanguages}
+                    onChange={handleChangeLang}
+                    options={selectLanguages}
+                  />
+                  <Popover content={alertNotification}>
+                    <Badge count={5}>
+                      <BellOutlined style={styles.badge} />
+                    </Badge>
+                  </Popover>
+
+                  <Popover content={inforUser} title="User Information">
+                    <Avatar
+                      style={styles.avatar}
+                      size={31}
+                      src={`${BASE_URL}/assets/images/longUser.jpg`}
                     />
-                    <Text>{themeObj.token.colorPrimary}</Text>
+                  </Popover>
+                </Space>
+              </Header>
+              <Content style={styles.content}>
+                <Outlet />
+              </Content>
+              <Footer style={styles.footer}>
+                Mini App &#169; 2023 Created by Trần Việt Long
+              </Footer>
+            </Layout>
+            <Space style={styles.drawer}>
+              <Button
+                type="primary"
+                onClick={showDrawer}
+                style={styles.btnDrawer}
+              >
+                <SettingOutlined spin={true} />
+                <Text strong={true} style={styles.textDrawer}>
+                  Setting
+                </Text>
+              </Button>
+              <Drawer
+                title="Theme Customize"
+                placement="right"
+                onClose={onCloseDrawer}
+                open={openDrawer}
+              >
+                <Space direction="vertical">
+                  <Space direction="vertical">
+                    <Title level={5}>Background</Title>
+                    <Space>
+                      <ColorPicker
+                        value={themeObj.token.colorBgContainer}
+                        onChange={(value) =>
+                          handleColorChange(value, typeToken.COLORBGCONTAINER)
+                        }
+                      />
+                      <Text>{themeObj.token.colorBgContainer}</Text>
+                    </Space>
                   </Space>
                   <Space direction="vertical">
-                    <Button onClick={resetTheme}>Reset Theme</Button>
+                    <Title level={5}>Color Primary</Title>
+                    <Space>
+                      <ColorPicker
+                        value={themeObj.token.colorPrimary}
+                        onChange={(value) =>
+                          handleColorChange(value, typeToken.COLORPRIMARY)
+                        }
+                      />
+                      <Text>{themeObj.token.colorPrimary}</Text>
+                    </Space>
+                    <Space direction="vertical">
+                      <Button onClick={resetTheme}>Reset Theme</Button>
+                    </Space>
                   </Space>
                 </Space>
-              </Space>
-            </Drawer>
-          </Space>
-        </Layout>
+              </Drawer>
+            </Space>
+          </Layout>
+        ) : (
+          <LoginForm onLogin={onLogin} />
+        )}
       </Config>
     </>
   );
